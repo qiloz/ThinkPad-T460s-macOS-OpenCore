@@ -1,8 +1,12 @@
-# macOS on ThinkPad T460s
+# macOS on ThinkPad T460s (Sonoma 14.7)
+> [!IMPORTANT]
+> This is the fork project with actualized kexts and tools from their repos. For addition it has critical fixes that was mentioned at https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore/issues (bluetooth, wifi).
+> 
+> ‼️ I don't recommend update OpenCore files if you want to install Sonoma because after doing it by myself the system wasn't starting
 
-<img align="right" src="./Images/t460s-monterey.png" alt="Lenovo ThinkPad T460s macOS Hackintosh OpenCore" width="300">
+![Screenshot 2024-10-27 at 21 27 04](https://github.com/user-attachments/assets/c5a61a88-c500-46d8-9612-82fdc1649d44)
 
-[![macOS](https://img.shields.io/badge/macOS-12.*-blue)](https://developer.apple.com/documentation/macos-release-notes)
+[![macOS](https://img.shields.io/badge/macOS-14.7-orange)](https://developer.apple.com/documentation/macos-release-notes)
 [![OpenCore](https://img.shields.io/badge/OpenCore-0.8.*-green)](https://github.com/acidanthera/OpenCorePkg)
 [![Model](https://img.shields.io/badge/Model-20F9*-lightgrey)](https://psref.lenovo.com/Product/ThinkPad_T460s)
 [![BIOS](https://img.shields.io/badge/BIOS-1.53-yellow)](https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t460s/downloads/driver-list/component?name=BIOS%2FUEFI)
@@ -22,7 +26,7 @@ Should you find an error or improve anything — whether in the config or in the
 **Meet the bootloader:**
 
 - [Why OpenCore](https://dortania.github.io/OpenCore-Install-Guide/why-oc.html)
-- Dortania's [website](https://dortania.github.io)
+- Dortania's [website](https://dortania.github.io)`
 
 **Recommended tools:**
 
@@ -49,7 +53,7 @@ Should you find an error or improve anything — whether in the config or in the
 | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Processor        | Core i5-6200U (2C, 2.4 / 3.0GHz, 3MB)                                                                                                                               |
 | Graphics         | Integrated Intel HD Graphics 520                                                                                                                                    |
-| Memory           | 4GB Soldered + 8GB DIMM 2133MHz DDR4, dual-channel                                                                                                                  |
+| Memory           | 4GB Soldered + 16GB DIMM 2133MHz DDR4, dual-channel                                                                                                                  |
 | Display          | 14" Full HD (1920x1080) IPS, Touch (read [Post-install>Enable Touchscreen](https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore#post-install-optional)) |
 | Storage          | Western Digital Black SN550 500GB NVMe SSD                                                                                                                          |
 | Ethernet         | Intel Ethernet Connection I219-LM (Jacksonville)                                                                                                                    |
@@ -86,6 +90,8 @@ This bootloader configuration may be compatible with other 6th generation ThinkP
 <details>  
 <summary><strong>How to install macOS</strong></summary>
 </br>
+
+> Before installation you need to be sure that you have wired Internet connection because `itlwm.kext` is not supported wifi connection from Recovery image and until HeliPort app is not installed at the main system. Just connect the LAN wire to the LAN port and complete this section. (How to setup Wi-FI look Post-Install section)
 
 1. [Create an installation media](https://dortania.github.io/OpenCore-Install-Guide/installer-guide/#making-the-installer)
 1. Download the [latest EFI folder](https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore/releases) and copy it into the ESP partiton
@@ -177,6 +183,16 @@ git clone https://github.com/corpnewt/GenSMBIOS && cd GenSMBIOS && chmod +x GenS
 ## Post-install (optional)
 
 <details>  
+<summary><strong>Disable window composition transparency (save battery and CPU)</strong></summary>
+</br>
+
+**Open**:  System settings > Accessibility > Reduce tranceparency ON
+
+![Screenshot 2024-10-27 at 20 50 20](https://github.com/user-attachments/assets/ee087a0d-4c97-4b8f-b5a7-4ac1eb36c085)
+
+</details>
+
+<details>  
 <summary><strong>Enable Touchscreen</strong></summary>
 </br>
 
@@ -192,11 +208,17 @@ git clone https://github.com/corpnewt/GenSMBIOS && cd GenSMBIOS && chmod +x GenS
 <summary><strong>Enable Intel WLAN cards</strong></summary>
 </br>
 
-The EFI contains macOS Monterey and Ventura compatible drivers. The default driver enabled in `config.plist` is macOS Monterey compatible. Should you need the Ventura driver, please disable `Airportitlwm.kext` and enable `Airportitlwm-13.kext`. If you're running a different version of macOS please download and enable a compatible version of [AirportItlwm.kext](https://github.com/OpenIntelWireless/itlwm/releases).
+The EFI contains macOS Sonoma compatible drivers. The default driver enabled in `config.plist` is macOS Sonoma compatible. `Airportitlwm.kext` now is not supported at Sonoma after many messages issue from another related repos and it has been replaced by compatible `itlwm.kext`.
+
+For connect to the Wi-Fi network you need to install [HeliPort](https://github.com/OpenIntelWireless/HeliPort/releases/tag/v1.5.0) app and run it. After run you will see another Wi-Fi icon at the toolbar, find your network and connect to it.
+![Screenshot 2024-10-27 at 21 25 04](https://github.com/user-attachments/assets/773bfa49-890f-45dc-9844-f4d88c28aeab)
+
+For the best experience add HeliPort to autostart settings and remove system Wi-Fi icon from the Control Center
+![Screenshot 2024-10-27 at 20 39 39](https://github.com/user-attachments/assets/7f033aed-86d1-4c9f-af1a-180ef43ed05e)
+![Screenshot 2024-10-27 at 20 40 27](https://github.com/user-attachments/assets/ca6ac189-9488-490c-b0b8-392c57d8e9d4)
+
 
 If you have bluetooth problem please reference to the [IntelBluetoothFirmware](https://openintelwireless.github.io/IntelBluetoothFirmware/FAQ.html#what-does-this-kext-do)
-
-Optional: [Remove unnecessary firmware files from OpenIntelWireless drivers](./Guides/Clean-OpenIntelWireless.md).
 
 </details>
 
@@ -206,12 +228,10 @@ Optional: [Remove unnecessary firmware files from OpenIntelWireless drivers](./G
 
 1. Download [AirportBrcmFixup](https://github.com/acidanthera/AirportBrcmFixup/releases) and
    [BrcmPatchRAM](https://github.com/acidanthera/BrcmPatchRAM/releases).
-1. Copy `AirportBrcmFixup.kext`, `BrcmBluetoothInjector.kext`, `BrcmFirmwareData.kext` and `BrcmPatchRAM3.kext` to `/EFI/OC/Kexts`
+1. Copy `BrcmBluetoothInjector.kext`, `BrcmFirmwareData.kext` and `BrcmPatchRAM3.kext` to `/EFI/OC/Kexts`
 1. Open `/EFI/OC/Config.plist` with any editor
 1. Add the content of [#broadcom-wlan.plist](/EFI/OC/%23broadcom-wlan.plist)
 1. Save and reboot the system
-
-If you have bluetooth problem please reference to the [AirportBrcmFixup](https://github.com/acidanthera/AirportBrcmFixup)
 
 </details>
 
@@ -250,6 +270,7 @@ If you have bluetooth problem please reference to the [AirportBrcmFixup](https:/
 Please follow this [USB mapping guide](https://dortania.github.io/OpenCore-Post-Install/usb/).
 
 </details>
+
 
 ## Other tweaks
 
@@ -448,7 +469,7 @@ A [brief guide](/Guides/Bios-Mod.md) referencing other guides.
 ## Status
 
 <details>  
-<summary><strong>What's working ✅</strong></summary>
+<summary><strong>What's working ✅ (but not fully tested)</strong></summary>
 </br>
  
 - [x] CPU Power Management `~1W on IDLE`
@@ -461,6 +482,7 @@ A [brief guide](/Guides/Bios-Mod.md) referencing other guides.
 - [x] iMessage, FaceTime, App Store, iTunes Store `Please generate your own SMBIOS`
 - [x] Speakers and headphones combo jack 
 - [x] Batteries
+- [x] Bluetooth (⚠️ Never disable Bluetooth it'll can never enable again ([issue](https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore/issues/181#issuecomment-1651966901)))
 - [x] Keyboard map and hotkeys with [YogaSMC](https://github.com/zhen-zen/YogaSMC)
 - [x] Touchscreen
 - [x] [Trackpad, Trackpoint and physical buttons](./Images/VoodooRMI-T460s-trackpad-gestures.gif) `all macOS gestures working thanks to VoodooRMI`
@@ -478,69 +500,47 @@ A [brief guide](/Guides/Bios-Mod.md) referencing other guides.
 - [ ] Safari DRM `Use Chromium engine to watch Apple TV+, Amazon Prime Video, Netflix and others`
 - [ ] WWAN (needs to be implemented)
 - [ ] Fingerprint Reader
-- [ ] Bluetooth (You can enable blutooth in the config.plist but it will cause the "volume hash mismatch" problem .Waiting for the solution.
 
 </details>
 
 <details>  
-<summary><strong>Update tracker 🔄</strong></summary>
+<summary><strong>Update tracker 🔄 </strong></summary>
 </br>
 
 | [EFI Release](https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore/releases)       | 0.8.5 |
 | ---------------------------------------------------------------------------------------------- | ----- |
-| [MacOS](https://www.apple.com/macos/)                                                          | 13.0  |
+| [MacOS](https://www.apple.com/macos/)                                                          | 14.7  |
 | [OpenCore](https://github.com/acidanthera/OpenCorePkg/releases)                                | 0.8.5 |
-| [Lilu](https://github.com/acidanthera/Lilu/releases)                                           | 1.6.2 |
-| [VirtualSMC](https://github.com/acidanthera/VirtualSMC/releases)                               | 1.3.0 |
+| [Lilu](https://github.com/acidanthera/Lilu/releases)                                           | 1.6.9 |
+| [VirtualSMC](https://github.com/acidanthera/VirtualSMC/releases)                               | 1.3.4 |
 | [YogaSMC](https://github.com/zhen-zen/YogaSMC/releases)                                        | 1.5.3 |
-| [WhateverGreen](https://github.com/acidanthera/WhateverGreen/releases)                         | 1.6.1 |
-| [AppleALC](https://github.com/acidanthera/AppleALC/releases)                                   | 1.7.5 |
-| [VoodooPS2Controller](https://github.com/acidanthera/VoodooPS2/releases)                       | 2.3.1 |
-| [VoodooRMI](https://github.com/VoodooSMBus/VoodooRMI/releases)                                 | 1.3.4 |
-| [VoodooI2C/VoodooI2CHID](https://github.com/VoodooI2C/VoodooI2C/releases)                      | 2.6.5 |
+| [WhateverGreen](https://github.com/acidanthera/WhateverGreen/releases)                         | 1.6.8 |
+| [AppleALC](https://github.com/acidanthera/AppleALC/releases)                                   | 1.9.2 |
+| [VoodooPS2Controller](https://github.com/acidanthera/VoodooPS2/releases)                       | 2.3.6 |
+| [VoodooRMI](https://github.com/VoodooSMBus/VoodooRMI/releases)                                 | 1.4.1 |
+| [VoodooI2C/VoodooI2CHID](https://github.com/VoodooI2C/VoodooI2C/releases)                      | 2.8.0 |
 | [IntelMausi](https://github.com/acidanthera/IntelMausi/releases)                               | 1.0.7 |
-| [HibernationFixup](https://github.com/acidanthera/HibernationFixup/releases)                   | 1.4.6 |
-| [CPUFriend](https://github.com/acidanthera/CPUFriend/releases)                                 | 1.2.6 |
-| [NVMeFix](https://github.com/acidanthera/NVMeFix/releases)                                     | 1.1.0 |
+| [HibernationFixup](https://github.com/acidanthera/HibernationFixup/releases)                   | 1.5.2 |
+| [CPUFriend](https://github.com/acidanthera/CPUFriend/releases)                                 | 1.2.9 |
+| [NVMeFix](https://github.com/acidanthera/NVMeFix/releases)                                     | 1.1.1 |
 | [RTCMemoryFixup](https://github.com/acidanthera/RTCMemoryFixup/releases)                       | 1.0.7 |
-| [AirportItlwm](https://github.com/OpenIntelWireless/itlwm/releases)                            | 2.2.0 |
-| [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/releases) | 2.2.0 |
-| [BlueToolFixup](https://github.com/acidanthera/BrcmPatchRAM/releases)                          | 2.6.4 |
+| [IntelBluetoothFirmware](https://github.com/OpenIntelWireless/IntelBluetoothFirmware/releases) | 2.4.0 |
+| [BlueToolFixup](https://github.com/acidanthera/BrcmPatchRAM/releases)                          | 2.6.9 |
 | [AppleBacklightSmoother](https://github.com/hieplpvip/AppleBacklightSmoother/releases)         | 1.0.2 |
-| [BrightnessKeys](https://github.com/acidanthera/BrightnessKeys/releases)                       | 1.0.2 |
+| [BrightnessKeys](https://github.com/acidanthera/BrightnessKeys/releases)                       | 1.0.3 |
 | [RealtekCardReader](https://github.com/0xFireWolf/RealtekCardReader/releases)                  | 0.9.7 |
 | [RealtekCardReaderFriend](https://github.com/0xFireWolf/RealtekCardReaderFriend/releases)      | 1.0.4 |
 
 </details>
 
 ## Performance
-
-<details>  
-<summary><strong>Power consumption and thermals 🔥</strong></summary>
-</br>
-
-| Idle State                | Max Frequency                  | 2 Thread Frequency             | All Thread Frequency           | GPU Max Frequency              |
-| ------------------------- | ------------------------------ | ------------------------------ | ------------------------------ | ------------------------------ |
-| ![](/Images/ipg-idle.png) | ![](./Images/ipg-max-freq.png) | ![](./Images/ipg-two-freq.png) | ![](./Images/ipg-all-freq.png) | ![](./Images/ipg-gpu-freq.png) |
-
-</details>
-
-<details>  
-<summary><strong>Benchmarks ⏱</strong></summary>
-</br>
-
-| CPU         | Single-Core | Multi-Core |
-| :---------- | ----------: | ---------: |
-| Geekbench 5 |         730 |       1611 |
-| **GPU**     |  **OpenCL** |  **Metal** |
-| Geekbench 5 |        4097 |       4179 |
-
-<small>macOS 12.3.1, EFI release 0.8.0, CPU:6200u</small>
+This section is not completed
 
 </details>
 
 ## Thanks to
 
+- Original repo: https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore
 - The hackintosh community on GitHub
 - [InsanelyMac](https://www.insanelymac.com/forum/)
 - [r/hackintosh](https://www.reddit.com/r/hackintosh/)
