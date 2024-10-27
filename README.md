@@ -1,10 +1,10 @@
-# macOS on ThinkPad T460s (Sonoma)
+# macOS on ThinkPad T460s (Sonoma 14.7)
 > [!IMPORTANT]
 > This is the fork project with actualized kexts and tools from their repos. For addition it has critical fixes that was mentioned at https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore/issues (bluetooth, wifi).
 > 
 > ‼️ I don't recommend update OpenCore files if you want to install Sonoma because after doing it by myself the system wasn't starting
 
-<img align="right" src="./Images/t460s-monterey.png" alt="Lenovo ThinkPad T460s macOS Hackintosh OpenCore" width="300">
+![Screenshot 2024-10-27 at 21 27 04](https://github.com/user-attachments/assets/c5a61a88-c500-46d8-9612-82fdc1649d44)
 
 [![macOS](https://img.shields.io/badge/macOS-14.7-orange)](https://developer.apple.com/documentation/macos-release-notes)
 [![OpenCore](https://img.shields.io/badge/OpenCore-0.8.*-green)](https://github.com/acidanthera/OpenCorePkg)
@@ -91,8 +91,8 @@ This bootloader configuration may be compatible with other 6th generation ThinkP
 <summary><strong>How to install macOS</strong></summary>
 </br>
 
-> [!WARNING]
-> Before installation you need to be sure that you have wired Internet connection because `itlwm.kext` is not supported wifi connection from Recovery image and until HeliPort app is not installed at the main system. Just connect the LAN wire to the LAN port and complete this section
+> Before installation you need to be sure that you have wired Internet connection because `itlwm.kext` is not supported wifi connection from Recovery image and until HeliPort app is not installed at the main system. Just connect the LAN wire to the LAN port and complete this section. (How to setup Wi-FI look Post-Install section)
+
 1. [Create an installation media](https://dortania.github.io/OpenCore-Install-Guide/installer-guide/#making-the-installer)
 1. Download the [latest EFI folder](https://github.com/simprecicchiani/ThinkPad-T460s-macOS-OpenCore/releases) and copy it into the ESP partiton
 1. Change your BIOS settings according to the table below
@@ -187,6 +187,9 @@ git clone https://github.com/corpnewt/GenSMBIOS && cd GenSMBIOS && chmod +x GenS
 </br>
 
 **Open**:  System settings > Accessibility > Reduce tranceparency ON
+
+![Screenshot 2024-10-27 at 20 50 20](https://github.com/user-attachments/assets/ee087a0d-4c97-4b8f-b5a7-4ac1eb36c085)
+
 </details>
 
 <details>  
@@ -206,8 +209,14 @@ git clone https://github.com/corpnewt/GenSMBIOS && cd GenSMBIOS && chmod +x GenS
 </br>
 
 The EFI contains macOS Sonoma compatible drivers. The default driver enabled in `config.plist` is macOS Sonoma compatible. `Airportitlwm.kext` now is not supported at Sonoma after many messages issue from another related repos and it has been replaced by compatible `itlwm.kext`.
-For connection to the Wi-Fi network you need to install [HeliPort](https://github.com/OpenIntelWireless/HeliPort/releases/tag/v1.5.0) app and run it. After run you will see another Wi-Fi icon at the toolbar, find your network and connect to it.
+
+For connect to the Wi-Fi network you need to install [HeliPort](https://github.com/OpenIntelWireless/HeliPort/releases/tag/v1.5.0) app and run it. After run you will see another Wi-Fi icon at the toolbar, find your network and connect to it.
+![Screenshot 2024-10-27 at 21 25 04](https://github.com/user-attachments/assets/773bfa49-890f-45dc-9844-f4d88c28aeab)
+
 For the best experience add HeliPort to autostart settings and remove system Wi-Fi icon from the Control Center
+![Screenshot 2024-10-27 at 20 39 39](https://github.com/user-attachments/assets/7f033aed-86d1-4c9f-af1a-180ef43ed05e)
+![Screenshot 2024-10-27 at 20 40 27](https://github.com/user-attachments/assets/ca6ac189-9488-490c-b0b8-392c57d8e9d4)
+
 
 If you have bluetooth problem please reference to the [IntelBluetoothFirmware](https://openintelwireless.github.io/IntelBluetoothFirmware/FAQ.html#what-does-this-kext-do)
 
